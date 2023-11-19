@@ -14,11 +14,11 @@ function createCard() {
   const templateNode = cardTemplate.querySelector('.card').cloneNode('true');
   templateNode.querySelector('.card__image').src = initialCards[index].link;
   templateNode.querySelector('.card__title').textContent = initialCards[index].name;
-  cardSection.append(templateNode);
-  index++;
   templateNode.querySelector('.card__delete-button').addEventListener('click', function(evt){
     removeCard(evt.target);
   });
+  cardSection.append(templateNode);
+  index++;
 }
 
 for (let i = 0; i < initialCards.length; i++) {
