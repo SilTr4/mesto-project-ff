@@ -58,10 +58,14 @@ export function addClass(nodeElement, className) {
   nodeElement.classList.add(className);
 }
 
+export function findPopup(currentElem) {
+  const parentElement = currentElem.closest('.popup');
+  return parentElement;
+}
+
 // Функция закрытия попапа
 export function closePopup(popupProfile) {
-  const parentElement = popupProfile.closest('.popup');
-  parentElement.classList.remove('popup_is-opened');
+  popupProfile.classList.remove('popup_is-opened');
   // Снятие события
   window.removeEventListener('keydown', closePopupByEscapeButton);
 }
@@ -74,7 +78,7 @@ export function handleProfileFormSubmit(evt) {
   const profilType = profileInfo.querySelector('.profile__description');
   profileName.textContent = profileNameField.value;
   profilType.textContent = profileTypeField.value;
-  closePopup(profilePopup);
+  closePopup(findPopup(profilePopup));
 }
 
 // Функция добавления карточки пользователя
@@ -90,6 +94,6 @@ export function handleUserCardFormSubmit(evt) {
 
   addCard(usersValue, true);
   popupFormPlace.reset();
-
-  closePopup(placePopap);
+  
+  closePopup(findPopup(placePopap));
 }

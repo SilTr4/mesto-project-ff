@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import { initialCards, addCard } from './components/cards.js';
-import { addClass, closePopup, handleProfileFormSubmit, handleUserCardFormSubmit, popupFormPlace, popupFormProfile, openProfilePopup, openPlacePopup } from './components/modal.js'
+import { addClass, closePopup, handleProfileFormSubmit, handleUserCardFormSubmit, popupFormPlace, popupFormProfile, openProfilePopup, openPlacePopup, findPopup } from './components/modal.js'
 const content = document.querySelector('.page');
 
 const popups = content.querySelectorAll('.popup');
@@ -25,7 +25,7 @@ popups.forEach(element => {
   addClass(element, 'popup_is-animated')
   element.addEventListener('click', evt => {
     if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close')) {
-      closePopup(evt.target);
+      closePopup(findPopup(evt.target));
     }
   });
 });
