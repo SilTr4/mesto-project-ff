@@ -59,8 +59,8 @@ export function addClass(nodeElement, className) {
 }
 
 // Функция закрытия попапа
-export function closePopup(nodeElement) {
-  const parentElement = nodeElement.closest('.popup');
+export function closePopup(popupProfile) {
+  const parentElement = popupProfile.closest('.popup');
   parentElement.classList.remove('popup_is-opened');
   // Снятие события
   window.removeEventListener('keydown', closePopupByEscapeButton);
