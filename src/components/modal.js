@@ -4,16 +4,19 @@ export const popupFormProfile = document.forms.edit_profile;
 const profileNameField = popupFormProfile.elements.name;
 const profileTypeField = popupFormProfile.elements.description;
 
+const profilePopup = popupFormProfile.closest('.popup');
+
 export const popupFormPlace = document.forms.new_place;
 const placeNameField = popupFormPlace.elements.place_name;
 const placeLinkField = popupFormPlace.elements.link;
 
+const placePopup = popupFormPlace.closest('.popup');
+
 const imgPopup = document.querySelector('.popup_type_image');
+const profileInfo = document.querySelector('.profile__info');
 
 // Функция открытия попап профайла
-export function openProfilePopup(evt) {
-  const profilePopup = popupFormProfile.closest('.popup');
-  const profileInfo = evt.target.closest('.profile__info');
+export function openProfilePopup() {
   profileNameField.value = profileInfo.querySelector('.profile__title').textContent;
   profileTypeField.value = profileInfo.querySelector('.profile__description').textContent;
   openPopup(profilePopup);
@@ -21,7 +24,6 @@ export function openProfilePopup(evt) {
 
 // Функция открытия попапа добавления карточек
 export function openPlacePopup() {
-  const placePopup = popupFormPlace.closest('.popup');
   openPopup(placePopup);
 }
 
@@ -46,8 +48,8 @@ export function openPopup(nodeElement) {
 // Функция закрытия попапа клавишей ESC
 function closePopupByEscapeButton(evt) {
   if (evt.key === 'Escape') {
-    const isPopupAvtive = document.querySelector('.popup_is-opened');
-    closePopup(isPopupAvtive);
+    const popupOpened = document.querySelector('.popup_is-opened');
+    closePopup(popupOpened);
   }
 }
 
@@ -67,17 +69,18 @@ export function closePopup(nodeElement) {
 // Функция редактирования профиля
 export function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  const profileInfo = document.querySelector('.profile__info');
+  const profilePopup = evt.target;
   const profileName = profileInfo.querySelector('.profile__title');
   const profilType = profileInfo.querySelector('.profile__description');
   profileName.textContent = profileNameField.value;
   profilType.textContent = profileTypeField.value;
-  closePopup(evt.target);
+  closePopup(profilePopup);
 }
 
 // Функция добавления карточки пользователя
 export function handleUserCardFormSubmit(evt) {
   evt.preventDefault();
+  const placePopap = evt.target;
   const userName = placeNameField.value;
   const userLink = placeLinkField.value;  
   const usersValue = {
@@ -87,5 +90,6 @@ export function handleUserCardFormSubmit(evt) {
 
   addCard(usersValue, true);
   popupFormPlace.reset();
-  closePopup(evt.target);
+
+  closePopup(placePopap);
 }
