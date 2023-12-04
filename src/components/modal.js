@@ -64,8 +64,8 @@ export function findPopup(currentElem) {
 }
 
 // Функция закрытия попапа
-export function closePopup(popupProfile) {
-  popupProfile.classList.remove('popup_is-opened');
+export function closePopup(currentPopup) {
+  currentPopup.classList.remove('popup_is-opened');
   // Снятие события
   window.removeEventListener('keydown', closePopupByEscapeButton);
 }
