@@ -1,10 +1,8 @@
 import { addClass, removeClass } from "./modal";
 
+
 function returnErrorText (inputElement) {
-  if (inputElement.validity.valueMissing) {
-    return 'Вы пропустили это поле.';
-  } 
-  else if (inputElement.validity.patternMismatch) {
+  if (inputElement.validity.patternMismatch) {
     return inputElement.dataset.errorMessage;
   } else {
     return inputElement.validationMessage;
@@ -36,13 +34,13 @@ function setEventListeners(formElement, config) {
   toggleButtonState(inputList, button, config);
   inputList.forEach(element => {
     element.addEventListener('input', () => {
-    isValid(formElement, element, config);
+      toggleInputErrorState(formElement, element, config);
     toggleButtonState(inputList, button, config);
     });
   });
 }
 
-function isValid(formElement, inputElement, config) {
+function toggleInputErrorState(formElement, inputElement, config) {
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, config);
   } else {
@@ -69,18 +67,9 @@ function toggleButtonState(inputList, button, config) {
 export function clearValidation(formElement, config) {
   const button = formElement.querySelector(config.submitButtonSelector);
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+  formElement.reset();
   toggleButtonState(inputList, button, config);
   inputList.forEach(inputElement => {
     hideInputError(formElement, inputElement, config);
   });
 }
-
-
-export const config = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'form__submit_inactive',
-  inputErrorClass: 'form__input_type_error',
-  errorClass: 'form__text-error_active'
-}; 

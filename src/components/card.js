@@ -1,40 +1,15 @@
-import { openImgPopup } from './modal.js'
-import { userId } from './api.js';
+import { openImgPopup, userId } from '../index.js'
 import { deleteCard, toLikeImage, toDislikeImage } from './api.js';
-
-export const initialCards = [
-    {
-      name: "Архыз",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-    },
-    {
-      name: "Челябинская область",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-    },
-    {
-      name: "Иваново",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-    },
-    {
-      name: "Камчатка",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-    },
-    {
-      name: "Холмогорский район",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-    },
-    {
-      name: "Байкал",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-    }
-];
+import { removeClass, addClass } from './modal.js';
 
 const cardSection = document.querySelector('.places__list');
 
 // Функция удаления карточки
 export function removeCard(e, imgId) {
   e.target.closest('.card').remove();
-  deleteCard(imgId);
+  deleteCard(imgId)
+  .catch((err) => {
+    console.log(err)});
 }
 
 // Функция активации лайка
@@ -42,9 +17,17 @@ export function changeLikeStatus(e, imgId, likes) {
   const likeClass = 'card__like-button_is-active';
   const like = e.target;
   if (like.classList.contains(likeClass)) {
-    toDislikeImage(imgId, likes, like, likeClass);
+    toDislikeImage(imgId)
+    .then((res) => {likes.textContent = res.likes.length;
+      removeClass(like, likeClass)})
+    .catch((err) => {
+      console.log(err)});
   } else {
-    toLikeImage(imgId, likes, like, likeClass);
+    toLikeImage(imgId)
+    .then((res) => {likes.textContent = res.likes.length;
+      addClass(like, likeClass)})
+    .catch((err) => {
+    console.log(err)});
   }
 }
 
@@ -55,7 +38,7 @@ function cloneTemplate() {
 }
 
 // Функция создания макета карточки
-export function createCard(elemObj, addRemoveLike) {
+export function createCard(elemObj, removeCardFunction, addRemoveLike) {
   const cardElement = cloneTemplate();
   const cardImage = cardElement.querySelector('.card__image');
   const likes = cardElement.querySelector('.card__like-counter');
@@ -68,7 +51,7 @@ export function createCard(elemObj, addRemoveLike) {
   cardImage.addEventListener('click', openImgPopup);
   if (elemObj.owner._id === userId) {
     deleteButton.addEventListener('click', evt => {
-      removeCard(evt, cardElement.dataset.imgId)});    //addEventListener('click', removeCardFunction);
+      removeCardFunction(evt, cardElement.dataset.imgId)});
   } else {
     deleteButton.remove();
   }
@@ -82,7 +65,7 @@ export function createCard(elemObj, addRemoveLike) {
 
 // Функция добавления карточки
 export function addCard(element, toStart = false) {
-  const card = createCard(element, changeLikeStatus);
+  const card = createCard(element, removeCard ,changeLikeStatus);
   if (toStart === true) {
     cardSection.prepend(card);
   } else {
